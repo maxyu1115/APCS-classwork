@@ -12,6 +12,7 @@ import javax.swing.*;
  * @author TheWanderingPath
  */
 public class Max2048 {
+    static int gridSize=4;
 
     /**
      * @param args the command line arguments
@@ -19,7 +20,7 @@ public class Max2048 {
     public static void main(String[] args) {
         // TODO code application logic here
         PlottingPanel jPanel=new PlottingPanel();
-        JFrame application = new JFrame("Maze");
+        JFrame application = new JFrame("2048");
         application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         application.getContentPane().add(jPanel);
         application.setSize(500, 600);  //width, height

@@ -24,18 +24,23 @@ public class PlottingPanel extends JPanel implements KeyListener{
 
     // view attributes
     private final static int IMAGE_SIZE = 500,
-            SCALE = 30,
+            SCALE = 60,
             DIAMETER = 8;
-    private final static int gridSize=4;
+    
+    private final int gSize=Max2048.gridSize;
 
     //changes made by button presses 
     private int[] delta = {-1, 1, 1, -1};
 
     //point colors
-    private Color[] colorChoice = {Color.ORANGE, Color.YELLOW, Color.MAGENTA, 
-        Color.MAGENTA, Color.RED, Color.BLACK, Color.GREEN};
+    private Color[] colorChoice = {Color.WHITE, new Color(255,255,204), new Color(255,255,102), 
+        new Color(255,255,0), new Color(255,204,153), new Color(255,153,51), new Color(255,128,0),
+        new Color(255,153,153), new Color(255,102,102), new Color(255,51,51), new Color(255,0,0), 
+        new Color(255,102,178), new Color(51,51,255), new Color(51,255,51)};
     
     private int grav=0;
+    
+    private Board2048 b=new Board2048();
     
     JLabel label;
     
@@ -46,16 +51,14 @@ public class PlottingPanel extends JPanel implements KeyListener{
         //This says the Plotting Panel will have a BorderLayout
         setLayout(new BorderLayout(500,600));
         
+        Board2048 b=new Board2048();
         
         addKeyListener(this);
         //setSize(1, 1);
         //setVisible(true);
+        
 
-        //Create a listener that will respond to buttons.
 
-
-        //Tell the buttons what Listener will control what they
-        //do when the button is pressed.
         
     }
     public void addNotify() {
@@ -66,8 +69,31 @@ public class PlottingPanel extends JPanel implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) { 
         int Key = e.getKeyCode();
-        System.out.println("Hi");
+        if (Key == KeyEvent.VK_RIGHT) {
+            grav=1;
+            System.out.println("Right key pressed");
+        }else if (Key == KeyEvent.VK_UP) {
+            grav=2;
+            System.out.println("Up key pressed");
+        }else if (Key == KeyEvent.VK_LEFT) {
+            grav=3;
+            System.out.println("left key pressed");
+        }else if (Key == KeyEvent.VK_DOWN) {
+            grav=4;
+            System.out.println("Down key pressed");
+        }
+        b.gravApplier(grav);
+        
+        
+        
         repaint();
+        
+        if (b.checkEnd()){
+            System.out.println("CLEAR!");
+            JFrame mess = new JFrame();
+            JOptionPane.showMessageDialog(mess, "Game Over!");
+            System.exit(1000);
+        }
     }
     @Override
     public void keyReleased(KeyEvent e) { 
@@ -83,53 +109,33 @@ public class PlottingPanel extends JPanel implements KeyListener{
         //white background for drawing
         g.setColor(Color.white);
         g.fillRect(0, 0, 500, 500);
-        /*
+        
 
-        for (int i = 0, x=0; i < gridSize; i ++) {
-            x=SCALE/2+DIAMETER/2+i*SCALE; //converts matrix coordinates to screen coordinates
-            for (int j = 0, y=0; j < gridSize; j ++) {
-                y=SCALE/2+DIAMETER/2+j*SCALE;
+        for (int i = 0, y=0; i < gSize; i ++) {                
+            y=SCALE/2+DIAMETER/2+i*SCALE;
+
+            for (int j = 0, x=0; j < gSize; j ++) {
+                            x=SCALE/2+DIAMETER/2+j*SCALE; //converts matrix coordinates to screen coordinates
+
                 
-                g.setColor(colorChoice[ Max2048.mat[i][j] +1 ]);
-                g.fillRect(x, y, 30, 30);
+                
+                if (b.board[i][j]!=0){
+                    g.setColor(colorChoice[b.board[i][j]]);
+                    g.fillRect(x, y, SCALE, SCALE);
+                    g.setColor(Color.BLACK);
+                    g.drawString(""+(int)Math.pow(2,b.board[i][j]), x+SCALE/2, y+SCALE/2);
+                }
                 g.setColor(Color.BLACK);
-                g.drawRect(x, y, 30, 30);
+                g.drawRect(x, y, SCALE, SCALE);
             }
         }
 
         //Plot the control points
-        g.setColor(Color.RED);
-        g.fillOval((cP[0]+1)*SCALE,
-                (cP[1]+1)*SCALE,
-                DIAMETER, DIAMETER);
-*/
+
         //draw the curve 
     }  //end paintComponent
 
     
-    //*** A listener for buttons
-    //This is a class within a class, 
-    //so it has access to the private class data.
-    //Any time a button is pressed, this will be called.
-
-        /*public void actionPerformed(ActionEvent event) {
-            //change control point value
-            for (int i = 0; i < 4; i++) {
-                if (event.getSource() == moveButton[i]) {
-                    
-                    
-                        System.out.println("CLEAR!");
-                        JFrame mess = new JFrame();
-                        JOptionPane.showMessageDialog(mess, "CLEAR!! CONGRATS!!!");
-                        System.exit(1000);
-
-                    }
-
-                
-            }
-
-            repaint(); //to repaint with the changes
-        }*/
 
     
 }
